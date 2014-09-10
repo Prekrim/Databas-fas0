@@ -15,6 +15,27 @@ void readline(char *dest, int n, FILE *source){
     dest[len-1] = '\0';
 }
 
+
+
+
+int readDatabase(char *filename, Node list, char buffer[]){
+  printf("Loading database \"%s\"...\n\n", filename);
+  FILE *database = fopen(filename, "r");
+  
+  while(!(feof(database))){
+    Node newNode = malloc(sizeof(struct node));
+    readline(buffer, 128, database);
+    newNode->key = malloc(strlen(buffer) + 1);
+    strcpy(newNode->key, buffer);
+    readline(buffer, 128, database);
+    newNode->value = malloc(strlen(buffer) + 1);
+    strcpy(newNode->value, buffer);
+    newNode->next = list;
+    list = newNode;
+  }
+  return 0;
+
+}
 int main(int argc, char *argv[]){
   if (argc < 2){
     puts("Usage: db [FILE]");
@@ -31,21 +52,14 @@ int main(int argc, char *argv[]){
   puts("");
   // Read the input file
   char *filename = argv[1];
-  printf("Loading database \"%s\"...\n\n", filename);
-  FILE *database = fopen(filename, "r");
+  //printf("Loading database \"%s\"...\n\n", filename);
+  //FILE *database = fopen(filename, "r");
   char buffer[128];
   Node list = NULL;
-  while(!(feof(database))){
-    Node newNode = malloc(sizeof(struct node));
-    readline(buffer, 128, database);
-    newNode->key = malloc(strlen(buffer) + 1);
-    strcpy(newNode->key, buffer);
-    readline(buffer, 128, database);
-    newNode->value = malloc(strlen(buffer) + 1);
-    strcpy(newNode->value, buffer);
-    newNode->next = list;
-    list = newNode;
-  }
+  
+  
+  readDatabase(filename, list, buffer);
+
   // Main loop
   int choice = -1;
   while(choice != 0){
