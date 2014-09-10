@@ -1,12 +1,15 @@
+// Inkludera div biblotek
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+// Definiera nod
 typedef struct node{
   char *key;
   char *value;
   struct node *next;
 } *Node;
+
 
 void readline(char *dest, int n, FILE *source){
   fgets(dest, n, source);
@@ -14,6 +17,7 @@ void readline(char *dest, int n, FILE *source){
   if(dest[len-1] == '\n')
     dest[len-1] = '\0';
 }
+
 
 
 
@@ -36,6 +40,45 @@ int readDatabase(char *filename, Node list, char buffer[]){
   return 0;
 
 }
+
+int chooseIndex(){
+  int choice;
+  
+  puts("Please choose an operation");
+  puts("1. Query a key");
+  puts("2. Update an entry");
+  puts("3. New entry");
+  puts("4. Remove entry");
+  puts("5. Print database");
+  puts("0. Exit database");
+  printf("? ");
+  scanf("%d", &choice);
+  while(getchar() != '\n'); // Clear stdin
+  
+  return (choice);  
+}
+
+void query(char buffer, Node list){
+ 
+  printf("Enter key: ");
+  readline(&buffer, 128, stdin);
+  puts("Searching database...\n");
+  int found = 0;
+  Node cursor = list;
+  while(!found && cursor != NULL){
+    if(strcmp(&buffer, cursor->key) == 0){
+      puts("Found entry:");
+      printf("key: %s\nvalue: %s\n", cursor->key, cursor->value);
+          found = 1;
+    }else{
+      cursor = cursor->next;
+    }
+  }
+  if(!found){
+    printf("Could not find an entry matching key \"%s\"!\n", &buffer);
+  }
+}
+
 int main(int argc, char *argv[]){
   if (argc < 2){
     puts("Usage: db [FILE]");
@@ -60,41 +103,21 @@ int main(int argc, char *argv[]){
   
   readDatabase(filename, list, buffer);
 
+
   // Main loop
-  int choice = -1;
+  //int choice = -1;
+  
+  // Choose the desired operatio
+  int choice = chooseIndex(); 
+  int found;
+  Node cursor;
+
   while(choice != 0){
-    puts("Please choose an operation");
-    puts("1. Query a key");
-    puts("2. Update an entry");
-    puts("3. New entry");
-    puts("4. Remove entry");
-    puts("5. Print database");
-    puts("0. Exit database");
-    printf("? ");
-    scanf("%d", &choice);
-    while(getchar() != '\n'); // Clear stdin
-    int found;
-    Node cursor;
+
     switch(choice){
+
     case 1:
-      // Query
-      printf("Enter key: ");
-      readline(buffer, 128, stdin);
-      puts("Searching database...\n");
-      found = 0;
-      cursor = list;
-      while(!found && cursor != NULL){
-        if(strcmp(buffer, cursor->key) == 0){
-          puts("Found entry:");
-          printf("key: %s\nvalue: %s\n", cursor->key, cursor->value);
-          found = 1;
-        }else{
-          cursor = cursor->next;
-        }
-      }
-      if(!found){
-        printf("Could not find an entry matching key \"%s\"!\n", buffer);
-      }
+      query(*buffer, list);
       break;
     case 2:
       // Update
@@ -198,6 +221,8 @@ int main(int argc, char *argv[]){
       puts("Could not parse choice! Please try again");
     }
     puts("");
+    choice = chooseIndex();
+
   }
   return 0;
 }
