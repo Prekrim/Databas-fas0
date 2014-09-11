@@ -28,10 +28,6 @@ void printDatabase(Node list){
       }
 }
 
-
-
-
-
 Node readDatabase(char *filename, Node list, char buffer[]){
   printf("Loading database \"%s\"...\n\n", filename);
   FILE *database = fopen(filename, "r");
@@ -196,8 +192,6 @@ int main(int argc, char *argv[]){
   puts("");
   // Read the input file
   char *filename = argv[1];
-  //printf("Loading database \"%s\"...\n\n", filename);
-  //FILE *database = fopen(filename, "r");
   char buffer[128];
   Node list = NULL;
   
@@ -206,8 +200,7 @@ int main(int argc, char *argv[]){
 
 
   // Main loop
-  //int choice = -1;
-  Node cursor;
+ 
   
   // Choose the desired operatio
   int choice = chooseIndex(); 
