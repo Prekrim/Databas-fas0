@@ -18,11 +18,21 @@ void readline(char *dest, int n, FILE *source){
     dest[len-1] = '\0';
 }
 
+void printDatabase(Node list){
+      // Print database
+      Node cursor = list;
+      while(cursor != NULL){
+        puts(cursor->key);
+        puts(cursor->value);
+        cursor = cursor->next;
+      }
+}
 
 
 
 
-int readDatabase(char *filename, Node list, char buffer[]){
+
+Node readDatabase(char *filename, Node list, char buffer[]){
   printf("Loading database \"%s\"...\n\n", filename);
   FILE *database = fopen(filename, "r");
   
@@ -37,7 +47,7 @@ int readDatabase(char *filename, Node list, char buffer[]){
     newNode->next = list;
     list = newNode;
   }
-  return 0;
+  return list;
 
 }
 
@@ -57,7 +67,6 @@ int chooseIndex(){
   
   return (choice);  
 }
-
 void query(char buffer, Node list){
  
   printf("Enter key: ");
@@ -65,7 +74,7 @@ void query(char buffer, Node list){
   puts("Searching database...\n");
   int found = 0;
   Node cursor = list;
-  while(!found && cursor != NULL){
+  while(!found && cursor != NULL) {
     if(strcmp(&buffer, cursor->key) == 0){
       puts("Found entry:");
       printf("key: %s\nvalue: %s\n", cursor->key, cursor->value);
@@ -77,6 +86,7 @@ void query(char buffer, Node list){
   if(!found){
     printf("Could not find an entry matching key \"%s\"!\n", &buffer);
   }
+  
 }
 
 int main(int argc, char *argv[]){
@@ -101,7 +111,7 @@ int main(int argc, char *argv[]){
   Node list = NULL;
   
   
-  readDatabase(filename, list, buffer);
+  list = readDatabase(filename, list, buffer);
 
 
   // Main loop
@@ -111,14 +121,16 @@ int main(int argc, char *argv[]){
   int choice = chooseIndex(); 
   int found;
   Node cursor;
-
+  
   while(choice != 0){
-
+    
     switch(choice){
-
+      
     case 1:
       query(*buffer, list);
       break;
+
+      
     case 2:
       // Update
       printf("Enter key: ");
@@ -204,14 +216,10 @@ int main(int argc, char *argv[]){
       }
       break;
     case 5:
-      // Print database
-      cursor = list;
-      while(cursor != NULL){
-        puts(cursor->key);
-        puts(cursor->value);
-        cursor = cursor->next;
-      }
+
+      printDatabase(list);
       break;
+
     case 0:
       // Exit
       puts("Good bye!");
