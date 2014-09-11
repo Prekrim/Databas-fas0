@@ -18,16 +18,6 @@ void readline(char *dest, int n, FILE *source){
     dest[len-1] = '\0';
 }
 
-void printDatabase(Node list){
-      // Print database
-      Node cursor = list;
-      while(cursor != NULL){
-        puts(cursor->key);
-        puts(cursor->value);
-        cursor = cursor->next;
-      }
-}
-
 Node readDatabase(char *filename, Node list, char buffer[]){
   printf("Loading database \"%s\"...\n\n", filename);
   FILE *database = fopen(filename, "r");
@@ -176,6 +166,16 @@ Node delete(char buffer, Node list){
   return (list);
 }
 
+void printDatabase(Node list){
+  // Print database
+  Node cursor = list;
+  while(cursor != NULL){
+    puts(cursor->key);
+    puts(cursor->value);
+    cursor = cursor->next;
+  }
+}
+
 int main(int argc, char *argv[]){
   if (argc < 2){
     puts("Usage: db [FILE]");
@@ -199,9 +199,7 @@ int main(int argc, char *argv[]){
   list = readDatabase(filename, list, buffer);
 
 
-  // Main loop
- 
-  
+  // Main loop  
   // Choose the desired operatio
   int choice = chooseIndex(); 
   
