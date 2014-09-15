@@ -2,26 +2,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "database.h"
 
-// Definiera nod
-typedef struct node{
-  char *key;
-  char *value;
-  struct node *next;
-} *Node;
+// Funktionsprototyper
+//void readline(char *dest, int n, FILE *source);
+//Node readDatabase(char *filename);
+int chooseIndex();
+void query(Node list);
+void update(Node list);
+Node newEntry(Node list);
+void printDatabase(Node list);
+Node delete(Node list);
+int main(int argc, char *argv[]);
 
-
-void readline(char *dest, int n, FILE *source){
-  fgets(dest, n, source);
-  int len = strlen(dest);
-  if(dest[len-1] == '\n')
-    dest[len-1] = '\0';
-}
-
-Node readDatabase(char *filename, Node list, char buffer[]){
+/*Node readDatabase(char *filename){
   printf("Loading database \"%s\"...\n\n", filename);
   FILE *database = fopen(filename, "r");
-  
+  Node list = NULL;
+  char buffer[128];
+
   while(!(feof(database))){
     Node newNode = malloc(sizeof(struct node));
     readline(buffer, 128, database);
@@ -34,8 +33,18 @@ Node readDatabase(char *filename, Node list, char buffer[]){
     list = newNode;
   }
   return list;
-
 }
+*/
+
+/*
+
+void readline(char *dest, int n, FILE *source){
+  fgets(dest, n, source);
+  int len = strlen(dest);
+  if(dest[len-1] == '\n')
+    dest[len-1] = '\0';
+}
+  */
 
 int chooseIndex(){
   int choice;
@@ -53,15 +62,28 @@ int chooseIndex(){
   
   return (choice);  
 }
-void query(char buffer, Node list){
- 
+void query(Node list){
+  char buffer[128]; 
   printf("Enter key: ");
-  readline(&buffer, 128, stdin);
+  readline(buffer, 128, stdin);
   puts("Searching database...\n");
   int found = 0;
-  Node cursor = list;
+  Node match = findMatch(buffer, list, &found);
+  char *key = findKey(match);
+  char *val = findValue(match);
+
+  if(found){
+    puts("Found entry:");
+    printf("key: %s\nvalue: %s\n", key, val);   
+  }
+  else{
+    printf("Could not find an entry matching key \"%s\"!\n", buffer);
+  }
+}
+
+  /*
   while(!found && cursor != NULL) {
-    if(strcmp(&buffer, cursor->key) == 0){
+    if(strcmp(buffer, cursor->key) == 0){
       puts("Found entry:");
       printf("key: %s\nvalue: %s\n", cursor->key, cursor->value);
           found = 1;
@@ -70,20 +92,25 @@ void query(char buffer, Node list){
     }
   }
   if(!found){
-    printf("Could not find an entry matching key \"%s\"!\n", &buffer);
+    printf("Could not find an entry matching key \"%s\"!\n", buffer);
   }
   
 }
+*/
 
-void update(char buffer, Node list){
+/*
+void update(Node list){
   // Update
+  char buffer[128];
   printf("Enter key: ");
-  readline(&buffer, 128, stdin);
+  readline(buffer, 128, stdin);
   puts("Searching database...\n");
-  int found = 0;
+  int *found = 0;
   Node cursor = list;
+
+
   while(!found && cursor != NULL){
-    if(strcmp(&buffer, cursor->key) == 0){
+    if(strcmp(buffer, cursor->key) == 0){
       puts("Matching entry found:");
       printf("key: %s\nvalue: %s\n\n", cursor->key, cursor->value);
       found = 1;
@@ -92,27 +119,31 @@ void update(char buffer, Node list){
     }
   }
   if(!found){
-    printf("Could not find an entry matching key \"%s\"!\n", &buffer);
+    printf("Could not find an entry matching key \"%s\"!\n", buffer);
   }else{
     printf("Enter new value: ");
-    readline(&buffer, 128, stdin);
+    readline(buffer, 128, stdin);
     free(cursor->value);
-    cursor->value = malloc(strlen(&buffer) + 1);
-    strcpy(cursor->value, &buffer);
+    cursor->value = malloc(strlen(buffer) + 1);
+    strcpy(cursor->value, buffer);
     puts("Value inserted successfully!");
       }
 
 }
 
-Node newEntry(char buffer, Node list){
+*/
+
+/*
+Node newEntry(Node list){
   // Insert
+  char buffer[128];
   printf("Enter key: ");
-  readline(&buffer, 128, stdin);
+  readline(buffer, 128, stdin);
   puts("Searching database for duplicate keys...");
   int found = 0;
   Node cursor = list;
   while(!found && cursor != NULL){
-    if(strcmp(&buffer, cursor->key) == 0){
+    if(strcmp(buffer, cursor->key) == 0){
       printf("key \"%s\" already exists!\n", cursor->key);
       found = 1;
     }else{
@@ -123,12 +154,12 @@ Node newEntry(char buffer, Node list){
   if(!found){ // Insert new node to the front of the list
     puts("Key is unique!\n");
     Node newNode = malloc(sizeof(struct node));
-    newNode->key = malloc(strlen(&buffer) + 1);
-    strcpy(newNode->key, &buffer);
+    newNode->key = malloc(strlen(buffer) + 1);
+    strcpy(newNode->key, buffer);
     printf("Enter value: ");
-    readline(&buffer, 128, stdin);
-    newNode->value = malloc(strlen(&buffer) + 1);
-    strcpy(newNode->value, &buffer);
+    readline(buffer, 128, stdin);
+    newNode->value = malloc(strlen(buffer) + 1);
+    strcpy(newNode->value, buffer);
     newNode->next = list;
     list = newNode;
     puts("");
@@ -138,16 +169,17 @@ Node newEntry(char buffer, Node list){
   return (list);
 } 
 
-Node delete(char buffer, Node list){
+Node delete(Node list){
   // Delete
+  char buffer[128];
   printf("Enter key: ");
-  readline(&buffer, 128, stdin);
+  readline(buffer, 128, stdin);
   puts("Searching database...\n");
   int found = 0;
   Node cursor = list;
   Node prev = NULL;
   while(!found && cursor != NULL){
-    if(strcmp(&buffer, cursor->key) == 0){
+    if(strcmp(buffer, cursor->key) == 0){
       if(prev == NULL){ // Delete first node
 	list = cursor->next;
       }else{
@@ -161,20 +193,21 @@ Node delete(char buffer, Node list){
     }
   }
   if(!found){
-    printf("Could not find an entry matching key \"%s\"!\n", &buffer);
+    printf("Could not find an entry matching key \"%s\"!\n", buffer);
   }
   return (list);
 }
+*/
 
 void printDatabase(Node list){
-  // Print database
   Node cursor = list;
   while(cursor != NULL){
-    puts(cursor->key);
-    puts(cursor->value);
-    cursor = cursor->next;
+    puts(findKey(cursor));
+    puts(findValue(cursor));
+    cursor = nextNode(cursor);
   }
 }
+
 
 int main(int argc, char *argv[]){
   if (argc < 2){
@@ -192,43 +225,35 @@ int main(int argc, char *argv[]){
   puts("");
   // Read the input file
   char *filename = argv[1];
-  char buffer[128];
-  Node list = NULL;
   
-  
-  list = readDatabase(filename, list, buffer);
-
+  // Läs in databasen
+  printf("Loading database \"%s\"...\n\n", filename);
+  Node list = readDatabase(filename);
 
   // Main loop  
-  // Choose the desired operatio
-  int choice = chooseIndex(); 
-  
+  // Choose the desired operation
+  int choice = chooseIndex();  
   while(choice != 0){
     
     switch(choice){
       
     case 1:
-      query(*buffer, list);
+      query(list);
       break;
-
       
     case 2:
-      
-      update(*buffer, list);
+      //update(list);
       break;
     
     case 3:
-      
-      list = newEntry(*buffer, list);
+      //list = newEntry(list);
       break;
 
-    case 4:
-     
-      list = delete(*buffer, list);
+    case 4:     
+      //list = delete(list);
       break;
    
     case 5:
-
       printDatabase(list);
       break;
 
@@ -236,6 +261,7 @@ int main(int argc, char *argv[]){
       // Exit
       puts("Good bye!");
       break;
+
     default:
       // Please try again
       puts("Could not parse choice! Please try again");
