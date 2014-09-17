@@ -50,11 +50,11 @@ void query(Node list){
 
 void update(Node list){
   char buffer[128];
-  int *found = 0;
+  int found = 0;
   printf("Enter key: ");
   readline(buffer, 128, stdin);
   puts("Searching database...\n");
-  Node match = findMatch(buffer, list, found);
+  Node match = findMatch(buffer, list, &found);
   if (match != NULL){
     puts("Matching entry found:");
     char *key = findKey(match);
@@ -62,7 +62,7 @@ void update(Node list){
     printf("key: %s\nvalue: %s\n\n", key, value);
     printf("Enter new value: ");
     readline(buffer, 128, stdin);
-    match = updateNode(*buffer, match);
+    setKey(buffer, match);
     puts("Value inserted successfully!");
       }
   else{
@@ -72,7 +72,6 @@ void update(Node list){
 }
 /*
 Node newEntry(Node list){
-  // Insert
   char buffer[128];
   printf("Enter key: ");
   readline(buffer, 128, stdin);
@@ -105,7 +104,8 @@ Node newEntry(Node list){
   }
   return (list);
 } 
-
+*/
+/*
 Node delete(Node list){
   // Delete
   char buffer[128];
