@@ -11,5 +11,7 @@ char *findKey(Node node);
 char *findValue(Node node);
 void readline(char *dest, int n, FILE *source);
 Node nextNode(Node node);
+Node updateNode(char buffer, Node node);
+void setKey(char *newKey, Node node);
 
 #endif

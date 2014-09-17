@@ -17,6 +17,13 @@ void readline(char *dest, int n, FILE *source){
     dest[len-1] = '\0';
 }
 
+Node updateNode(char buffer, Node node){
+    free(node->value);
+    node->value = malloc(strlen(&buffer) + 1);
+    strcpy(node->value, &buffer);
+    return node;
+}
+
 
 Node readDatabase(char *filename){
 
@@ -73,3 +80,8 @@ Node nextNode(Node node){
   else {return node->next;}
 }
 
+
+void setKey(char *newKey, Node node){
+  if (node != NULL){
+    node->key = newKey;}
+}
