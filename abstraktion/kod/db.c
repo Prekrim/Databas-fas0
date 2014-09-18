@@ -62,7 +62,7 @@ void update(Node list){
     printf("key: %s\nvalue: %s\n\n", key, value);
     printf("Enter new value: ");
     readline(buffer, 128, stdin);
-    setKey(buffer, match);
+    setValue(buffer, match);
     puts("Value inserted successfully!");
       }
   else{
@@ -70,41 +70,35 @@ void update(Node list){
   }
   
 }
-/*
+
 Node newEntry(Node list){
-  char buffer[128];
+  char newKey[128];
+  char newValue[128];
   printf("Enter key: ");
-  readline(buffer, 128, stdin);
+  readline(newKey, 128, stdin);
   puts("Searching database for duplicate keys...");
   int found = 0;
-  Node cursor = list;
-  while(!found && cursor != NULL){
-    if(strcmp(buffer, cursor->key) == 0){
-      printf("key \"%s\" already exists!\n", cursor->key);
-      found = 1;
-    }else{
-      cursor = cursor->next;
-    }
+  //Node cursor = list;
+  Node match = findMatch(newKey, list, &found);
+  
+  if(found && match != NULL){
+    printf("key \"%s\" already exists!\n", newKey);
   }
   
-  if(!found){ // Insert new node to the front of the list
+  if(!found){ 
+    // Insert new node to the front of the list
     puts("Key is unique!\n");
-    Node newNode = malloc(sizeof(struct node));
-    newNode->key = malloc(strlen(buffer) + 1);
-    strcpy(newNode->key, buffer);
     printf("Enter value: ");
-    readline(buffer, 128, stdin);
-    newNode->value = malloc(strlen(buffer) + 1);
-    strcpy(newNode->value, buffer);
-    newNode->next = list;
-    list = newNode;
+    readline(newValue, 128, stdin);
+    Node node = newNode(newKey, newValue);
+    list = insertNode(list, node);
     puts("");
     puts("Entry inserted successfully:");
-    printf("key: %s\nvalue: %s\n", list->key, list->value);
+    printf("key: %s\nvalue: %s\n", newKey, newValue);
   }
   return (list);
 } 
-*/
+
 /*
 Node delete(Node list){
   // Delete
@@ -163,13 +157,14 @@ int main(int argc, char *argv[]){
   // Read the input file
   char *filename = argv[1];
   
-  // Läs in databasen
+  // Read the database
   printf("Loading database \"%s\"...\n\n", filename);
   Node list = readDatabase(filename);
 
   // Main loop  
   // Choose the desired operation
   int choice = chooseIndex();  
+  
   while(choice != 0){
     
     switch(choice){
@@ -183,7 +178,7 @@ int main(int argc, char *argv[]){
       break;
     
     case 3:
-      //list = newEntry(list);
+      list = newEntry(list);
       break;
 
     case 4:     

@@ -81,10 +81,24 @@ Node nextNode(Node node){
 }
 
 
-void setKey(char *newKey, Node node){
+void setValue(char *newValue, Node node){
   if (node != NULL){
     free(node->value);
-    node->value = malloc(strlen(newKey) + 1);
-    strcpy(node->value, newKey);
+    node->value = malloc(strlen(newValue) + 1);
+    strcpy(node->value, newValue);
   }
+}
+
+Node newNode(char *key, char *value){
+  Node new = malloc(sizeof(struct node));
+  new->key = malloc(strlen(key) + 1);
+  strcpy(new->key, key);
+  new->value = malloc(strlen(value) + 1);
+  strcpy(new->value, value);
+  return new;
+}
+
+Node insertNode(Node list, Node node){
+  node->next = list;
+  return node;
 }
