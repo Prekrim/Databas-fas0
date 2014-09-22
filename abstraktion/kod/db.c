@@ -168,7 +168,7 @@ Node newEntry(Node list){
   }
   return (list);
 } 
-
+*/
 Node delete(Node list){
   // Delete
   char buffer[128];
@@ -176,28 +176,40 @@ Node delete(Node list){
   readline(buffer, 128, stdin);
   puts("Searching database...\n");
   int found = 0;
-  Node cursor = list;
-  Node prev = NULL;
-  while(!found && cursor != NULL){
-    if(strcmp(buffer, cursor->key) == 0){
-      if(prev == NULL){ // Delete first node
-	list = cursor->next;
-      }else{
-	prev->next = cursor->next;
-      }
-      found = 1;
-      printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", cursor->key, cursor->value);
-    }else{
-      prev = cursor;
-      cursor = cursor->next;
-    }
+  int success = 0;
+  Node target = findMatch(buffer, list, &found);
+  list = deleteMatch(buffer, list, &success);
+  /*
+  Node cursor = findMatch(buffer, list, &found);
+  Node prev = list;
+  prev = prevNode(prev, cursor);
+   
+  while(found && cursor != NULL){
+    if(prev == NULL){ // Delete first node
+      list = nextNode(cursor);
+      printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", findKey(cursor), findValue(cursor));
+      return list;
+    }else if(nextNode(cursor) == NULL){ // Delete last node
+      setNextNode(prev, NULL);
+      printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", findKey(cursor), findValue(cursor));
+      return list;
+    }else
+      setNextNode(prev, nextNode(cursor));
+      printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", findKey(cursor), findValue(cursor));
+      return list;
+    
   }
-  if(!found){
+  */
+  if(success){
+    printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", findKey(target), findValue(target));
+  } 
+  else{
     printf("Could not find an entry matching key \"%s\"!\n", buffer);
   }
+  
   return (list);
+  
 }
-*/
 
 void printDatabase(Node list){
   Node cursor = list;
@@ -250,7 +262,7 @@ int main(int argc, char *argv[]){
       break;
 
     case 4:     
-      //list = delete(list);
+      list = delete(list);
       break;
    
     case 5:

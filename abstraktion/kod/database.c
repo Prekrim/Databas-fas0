@@ -52,6 +52,31 @@ Node findMatch(char *buffer, Node list, int *found){
   return cursor;
 }
 
+Node deleteMatch(char *buffer, Node list, int *success){
+
+  int found = 0;
+  Node cursor = findMatch(buffer, list, &found);
+  Node prev = list;
+  prev = prevNode(prev, cursor);
+  
+  while(found && cursor != NULL){
+    *success = 1;
+    if(prev == NULL){ // Delete first node
+      list = cursor->next;
+      return list;
+    }
+    else if(nextNode(cursor) == NULL){ // Delete last node
+      setNextNode(prev, NULL);
+      return list;
+    }
+    else{ // Delete current node
+      setNextNode(prev, nextNode(cursor));
+      return list;
+    }
+  }
+  return list;
+}
+
 char *findKey(Node node){
   if (node == NULL){
     return NULL;
@@ -73,3 +98,37 @@ Node nextNode(Node node){
   else {return node->next;}
 }
 
+void setKey(char *newKey, Node node){
+  if(node != NULL)
+    {
+      node->key=newKey;
+    }
+}
+
+void setValue(char *newValue, Node node){
+  if(node != NULL)
+    {
+      node->value=newValue;
+    }
+}
+
+
+void setNextNode(Node node, Node newNode){
+  if(node != NULL)
+    {
+      node->next = newNode;
+    }
+}
+
+Node prevNode(Node node, Node searchNode){
+  if(searchNode == NULL){
+    return NULL;
+  }else
+    while(node != NULL){
+      if(node->next == searchNode){
+	return node;
+      }
+      node = node->next;
+    }
+  return node;
+}
