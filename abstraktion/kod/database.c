@@ -7,7 +7,8 @@
 typedef struct node{
   char *key;
   char *value;
-  struct node *next;
+  struct node *left;
+  struct node *right;
 } *Node;
 
 void readline(char *dest, int n, FILE *source){
@@ -16,47 +17,83 @@ void readline(char *dest, int n, FILE *source){
   if(dest[len-1] == '\n')
     dest[len-1] = '\0';
 }
-/*
-void updateNode(char buffer, Node node){
-    free(node->value);
-    node->value = malloc(strlen(&buffer) + 1);
-    strcpy(node->value, &buffer);
-    return node;
+
+Node insertNode(Node node, Node tree){
+  if (tree == NULL) {
+    tree = node;
+    return tree;
+  }
+
+  int compare = strcmp(node->key, tree->key);
+  printf("checking %s vs %s with result %d\n", node->key, tree->key, compare);
+
+  if (compare < 0 && tree->left == NULL){
+    tree->left = node;
+    puts("writing left");
+    return tree;
+  }
+  if (compare < 0 && tree->left != NULL){
+      puts("going left");
+      insertNode(node, tree->left);
+      return tree;
+    }
+  
+  if (compare > 0 && tree->right == NULL){
+    puts("writing right");
+    tree->right = node;
+    return tree;
+  }
+  if (compare > 0 && tree->right != NULL){
+    puts("going right");
+    insertNode(node, tree->right);
+    return tree;
+  } 
+  puts("Done");
+  return tree;
 }
-*/
 
 Node readDatabase(char *filename){
 
   FILE *database = fopen(filename, "r");
-  Node list = NULL;
-  char buffer[128];
-
-  while(!(feof(database))){
-    Node newNode = malloc(sizeof(struct node));
-    readline(buffer, 128, database);
-    newNode->key = malloc(strlen(buffer) + 1);
-    strcpy(newNode->key, buffer);
-    readline(buffer, 128, database);
-    newNode->value = malloc(strlen(buffer) + 1);
-    strcpy(newNode->value, buffer);
-    newNode->next = list;
-    list = newNode;
-  }
-  return list;
-
+  Node tree = NULL;
+  char key[128];
+  char value[128];
+    
+    while(!(feof(database))){
+      
+      readline(key, 128, database);
+      readline(value, 128, database);
+      Node newTree = newNode(key, value);
+      tree = insertNode(newTree, tree);
+    }
+  return tree;
 }
 
-Node findMatch(char *buffer, Node list, int *found){
-  Node cursor = list;
-  
-  while(cursor != NULL) {
-    if(strcmp(buffer, cursor->key) == 0) {
-      *found = 1;
-      return cursor;
-    }
-    else {cursor = nextNode(cursor);}
+Node findMatch(char *key, Node tree, int *found){
+  //Node cursor = tree;
+  //char target = tree->key;
+
+  if (tree == NULL) {
+    return NULL;
   }
-  return cursor;
+
+  if(strcmp(key, tree->key) == 0) {
+    *found = 1;
+    return tree;
+  }
+
+  int compare = strcmp(key, tree->key);
+
+  if (compare < 0){
+    Node left = findMatch(key, nextLeftNode(tree), found);
+    if (left != NULL) {return left;}
+  }
+  if (compare > 0){
+    Node right = findMatch(key, nextRightNode(tree), found); 
+    if (right != NULL) {return right;}
+  }
+  return NULL;
+    
 }
 
 char *findKey(Node node){
@@ -73,11 +110,28 @@ char *findValue(Node node){
   else{return node->value;}
 }
 
-Node nextNode(Node node){
-  if (node->next == NULL){
+void map(Node node){
+
+  Node left = nextLeftNode(node);
+  printDatabase(left);
+
+  Node right = nextRightNode(node);
+  printDatabase(right);
+}
+
+
+Node nextLeftNode(Node node){
+  if (node->left == NULL){
     return NULL;
   }
-  else {return node->next;}
+  else {return node->left;}
+}
+
+Node nextRightNode(Node node){
+  if (node->right == NULL){
+    return NULL;
+  }
+  else {return node->right;}
 }
 
 
@@ -95,10 +149,7 @@ Node newNode(char *key, char *value){
   strcpy(new->key, key);
   new->value = malloc(strlen(value) + 1);
   strcpy(new->value, value);
+  new->left = NULL;
+  new->right = NULL;
   return new;
-}
-
-Node insertNode(Node list, Node node){
-  node->next = list;
-  return node;
 }

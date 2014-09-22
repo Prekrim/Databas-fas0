@@ -78,7 +78,6 @@ Node newEntry(Node list){
   readline(newKey, 128, stdin);
   puts("Searching database for duplicate keys...");
   int found = 0;
-  //Node cursor = list;
   Node match = findMatch(newKey, list, &found);
   
   if(found && match != NULL){
@@ -86,12 +85,12 @@ Node newEntry(Node list){
   }
   
   if(!found){ 
-    // Insert new node to the front of the list
+    // Insert new node
     puts("Key is unique!\n");
     printf("Enter value: ");
     readline(newValue, 128, stdin);
     Node node = newNode(newKey, newValue);
-    list = insertNode(list, node);
+    list = insertNode(node, list);
     puts("");
     puts("Entry inserted successfully:");
     printf("key: %s\nvalue: %s\n", newKey, newValue);
@@ -130,12 +129,11 @@ Node delete(Node list){
 }
 */
 
-void printDatabase(Node list){
-  Node cursor = list;
-  while(cursor != NULL){
-    puts(findKey(cursor));
-    puts(findValue(cursor));
-    cursor = nextNode(cursor);
+void printDatabase(Node node){
+  if (node != NULL){ 
+    puts(findKey(node));
+    puts(findValue(node));
+    map(node);
   }
 }
 

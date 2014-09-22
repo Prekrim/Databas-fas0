@@ -10,10 +10,12 @@ Node findMatch(char *buffer, Node list, int *found);
 char *findKey(Node node);
 char *findValue(Node node);
 void readline(char *dest, int n, FILE *source);
-Node nextNode(Node node);
+Node nextLeftNode(Node node);
+Node nextRightNode(Node node);
 Node updateNode(char buffer, Node node);
 void setValue(char *newValue, Node node);
 Node newNode(char *key, char *value);
-Node insertNode(Node list, Node node);
-
+Node insertNode(Node node, Node tree);
+void map(Node node);
+void printDatabase(Node database);
 #endif
