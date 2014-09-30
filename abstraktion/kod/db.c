@@ -103,7 +103,8 @@ Node newEntry(Node list){
   return (list);
 } 
 
-/*
+
+
 Node delete(Node list){
   // Delete
   char buffer[128];
@@ -111,28 +112,29 @@ Node delete(Node list){
   readline(buffer, 128, stdin);
   puts("Searching database...\n");
   int found = 0;
-  Node cursor = list;
-  Node prev = NULL;
-  while(!found && cursor != NULL){
-    if(strcmp(buffer, cursor->key) == 0){
-      if(prev == NULL){ // Delete first node
-	list = cursor->next;
-      }else{
-	prev->next = cursor->next;
-      }
-      found = 1;
-      printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", cursor->key, cursor->value);
-    }else{
-      prev = cursor;
-      cursor = cursor->next;
-    }
-  }
-  if(!found){
+  int success = 0;
+  Node target = findMatch(buffer, list, &found);
+  /*char *key = malloc(strlen(findKey(target)) + 1);
+  strcpy(findKey(target), key);
+  char *val = malloc(strlen(findValue(target)) + 1);
+  strcpy(findValue(target), val);
+  printf("Val is %s and key is %s", val, key);
+  
+  printf("Val is %s and key is %s", val, key);
+  */
+  list = deleteMatch(buffer, list, &success);
+  if(success){
+    printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", findKey(target), findValue(target));
+  } 
+  else{
     printf("Could not find an entry matching key \"%s\"!\n", buffer);
   }
+  
+  //free(key);
+  //free(val);
   return (list);
+  
 }
-*/
 
 // Print the database to terminal
 void printDatabase(Node node){
@@ -187,7 +189,7 @@ int main(int argc, char *argv[]){
       break;
 
     case 4:     
-      //list = delete(list);
+      list = delete(list);
       break;
    
     case 5:

@@ -21,6 +21,14 @@ char *findValue(Node node);
 // Inserts the content in source to the destination dest
 void readline(char *dest, int n, FILE *source);
 
+Node nextNode(Node node);
+
+void setKey(char *newKey, Node node);
+void setNextNode(Node node, Node newNode);
+
+Node deleteMatch(char *buffer, Node list, int *success);
+Node prevNode(Node prev, Node searchNode, int *path);
+
 // Returns the left node connected node
 Node nextLeftNode(Node node);
 
@@ -44,5 +52,8 @@ void map(Node node);
 
 // Prints the key and value of the node database, and calls map with database
 void printDatabase(Node database);
+
+// Frigör minnet för en nod, inklusive dess innehåll
+void clearNode(Node node);
 
 #endif

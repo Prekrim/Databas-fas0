@@ -101,6 +101,78 @@ Node findMatch(char *key, Node tree, int *found){
     
 }
 
+// Returns the tree with a node removed that has a key string matching buffer, if there is none it returns the unmodified tree. 
+Node deleteMatch(char *buffer, Node tree, int *success){
+
+  int found = 0;
+  int path = 0;
+  Node cursor = findMatch(buffer, tree, &found);
+  if (cursor == NULL){return tree;}
+  Node prev = tree;
+  prev = prevNode(prev, cursor, &path);
+  
+  while(found && cursor != NULL){
+    *success = 1;
+    if(prev == NULL){ // Delete first node
+      if(tree->left == NULL && tree->right == NULL){
+	return NULL;
+      }else if(tree->left == NULL){
+	tree = tree->right;
+	clearNode(cursor);
+	return tree;
+      }else if(tree->right == NULL){
+	tree = tree->left;
+	clearNode(cursor);
+	return tree;
+      }else{
+        tree = insertNode(tree->right, tree->left);
+	clearNode(cursor);
+	return tree;
+      }
+    }
+    else if(cursor->left == NULL && cursor->right == NULL){ // Delete leaf
+      printf("Target is a leaf");
+      printf("Previous is %s ", prev->key);
+      if(path == 1){ // Leaf is left of parent node
+	prev->left = NULL;
+	
+      }else{ // Leaf is right of parent node
+	prev->right = NULL;
+      }
+      clearNode(cursor);
+      return tree;
+    }
+    else{ // Delete current node
+      printf("Target is node");
+      if(path == 1){ // Current node is left of previous node
+	printf("Current node is left of previous node");
+	if(cursor->left == NULL){
+	  printf("Current node has no left node");
+	  prev->left = cursor->right;
+	  
+	}else if(cursor->right == NULL){
+	  prev->left = cursor->left;
+	}else{
+	  insertNode(cursor->right, cursor->left);
+	  prev->left = cursor->left;
+	}
+      }else{ // Current node is right of previous node
+	if(cursor->left == NULL){
+	  prev->right = cursor->right;
+	}else if(cursor->right == NULL){
+	  prev->right = cursor->left;
+	}else{
+	  insertNode(cursor->right, cursor->left);
+	  prev->right = cursor->left;
+	}
+      }
+      clearNode(cursor);
+      return tree;
+    }
+  }
+  return tree;
+}
+
 // Returns the input nodes key
 char *findKey(Node node){
   if (node == NULL){
@@ -152,6 +224,14 @@ void setValue(char *newValue, Node node){
   }
 }
 
+// Sets the key in node to newkey.
+void setKey(char *newKey, Node node){
+  if(node != NULL)
+    {
+      node->key=newKey;
+    }
+}
+
 // Returns a new node
 Node newNode(char *key, char *value){
   Node new = malloc(sizeof(struct node));
@@ -162,4 +242,39 @@ Node newNode(char *key, char *value){
   new->left = NULL;
   new->right = NULL;
   return new;
+
+}
+
+Node prevNode(Node prev, Node searchNode, int *path){
+  if(searchNode->key != prev->key && prev != NULL){
+    if(prev->left == searchNode){ // searchNode is left child of prev
+      *path = 1;
+      return prev;
+    }else if(prev->right == searchNode){ // searchNode is right child of prev
+      *path = -1;
+      return prev;
+    } else{ // searchNode is within either left or right sub tree, recursive search
+      int compare = strcmp(prev->key, searchNode->key);
+      if(compare > 0){
+	*path = 1;
+	printf("Prev is now %s\n", prev->key);
+	prev = prevNode(prev->left, searchNode, path);
+	printf("Prev is now %s\n", prev->key);
+      }else{
+	*path = -1;
+	printf("Prev is now %s\n", prev->key);
+	prev = prevNode(prev->right, searchNode, path);
+      }
+
+      return prev;
+    }
+  }
+  return NULL;
+}
+
+
+void clearNode(Node node){
+  free(node->key);
+  free(node->value);
+  free(node);
 }
