@@ -13,6 +13,7 @@ void printDatabase(Node list);
 Node delete(Node list);
 int main(int argc, char *argv[]);
 
+// Returns an int that corresponds to the desired action
 int chooseIndex(){
   int choice;
   
@@ -29,6 +30,8 @@ int chooseIndex(){
   
   return (choice);  
 }
+
+// Find and print the name and value of a node
 void query(Node list){
   char buffer[128]; 
   printf("Enter key: ");
@@ -48,6 +51,7 @@ void query(Node list){
   }
 }
 
+// Change the value of a node in the database
 void update(Node list){
   char buffer[128];
   int found = 0;
@@ -71,6 +75,7 @@ void update(Node list){
   
 }
 
+// Returns the database with an new entry inserted
 Node newEntry(Node list){
   char newKey[128];
   char newValue[128];
@@ -129,6 +134,7 @@ Node delete(Node list){
 }
 */
 
+// Print the database to terminal
 void printDatabase(Node node){
   if (node != NULL){ 
     puts(findKey(node));
@@ -137,7 +143,7 @@ void printDatabase(Node node){
   }
 }
 
-
+// Main function
 int main(int argc, char *argv[]){
   if (argc < 2){
     puts("Usage: db [FILE]");
@@ -152,6 +158,7 @@ int main(int argc, char *argv[]){
   puts("   \\ \\____/\\ \\____/ ");
   puts("    \\/___/  \\/___/  ");
   puts("");
+
   // Read the input file
   char *filename = argv[1];
   

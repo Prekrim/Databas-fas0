@@ -3,7 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 
-// Definiera binärt sökträd
+// Define binary tree
 typedef struct node{
   char *key;
   char *value;
@@ -11,6 +11,7 @@ typedef struct node{
   struct node *right;
 } *Node;
 
+// Read a line from source and put it into dest
 void readline(char *dest, int n, FILE *source){
   fgets(dest, n, source);
   int len = strlen(dest);
@@ -18,40 +19,46 @@ void readline(char *dest, int n, FILE *source){
     dest[len-1] = '\0';
 }
 
+// Returns a tree with a node inserted into the tree
 Node insertNode(Node node, Node tree){
+  if (node == NULL) {
+    return tree;
+  }
+
   if (tree == NULL) {
     tree = node;
     return tree;
   }
 
   int compare = strcmp(node->key, tree->key);
-  printf("checking %s vs %s with result %d\n", node->key, tree->key, compare);
+  //printf("checking %s vs %s with result %d\n", node->key, tree->key, compare);
 
   if (compare < 0 && tree->left == NULL){
     tree->left = node;
-    puts("writing left");
+    //puts("writing left");
     return tree;
   }
   if (compare < 0 && tree->left != NULL){
-      puts("going left");
+    //puts("going left");
       insertNode(node, tree->left);
       return tree;
     }
   
   if (compare > 0 && tree->right == NULL){
-    puts("writing right");
+    //puts("writing right");
     tree->right = node;
     return tree;
   }
   if (compare > 0 && tree->right != NULL){
-    puts("going right");
+    //puts("going right");
     insertNode(node, tree->right);
     return tree;
   } 
-  puts("Done");
+  //puts("Done");
   return tree;
 }
 
+// Returns a new binary tree made from the input pointer filename
 Node readDatabase(char *filename){
 
   FILE *database = fopen(filename, "r");
@@ -69,10 +76,8 @@ Node readDatabase(char *filename){
   return tree;
 }
 
+// Find a matching node and return it, else return NULL
 Node findMatch(char *key, Node tree, int *found){
-  //Node cursor = tree;
-  //char target = tree->key;
-
   if (tree == NULL) {
     return NULL;
   }
@@ -96,6 +101,7 @@ Node findMatch(char *key, Node tree, int *found){
     
 }
 
+// Returns the input nodes key
 char *findKey(Node node){
   if (node == NULL){
     return NULL;
@@ -103,6 +109,7 @@ char *findKey(Node node){
   else{return node->key;}
 }
 
+// Returns the input nodes value
 char *findValue(Node node){
   if (node == NULL){
     return NULL;
@@ -110,6 +117,7 @@ char *findValue(Node node){
   else{return node->value;}
 }
 
+// Recursively calls print database to print the tree
 void map(Node node){
 
   Node left = nextLeftNode(node);
@@ -119,7 +127,7 @@ void map(Node node){
   printDatabase(right);
 }
 
-
+// Returns the next left node, if there are none returns NULL
 Node nextLeftNode(Node node){
   if (node->left == NULL){
     return NULL;
@@ -127,6 +135,7 @@ Node nextLeftNode(Node node){
   else {return node->left;}
 }
 
+// Returns the next right node, if there are none returns NULL
 Node nextRightNode(Node node){
   if (node->right == NULL){
     return NULL;
@@ -134,7 +143,7 @@ Node nextRightNode(Node node){
   else {return node->right;}
 }
 
-
+// Sets a new value for the input node
 void setValue(char *newValue, Node node){
   if (node != NULL){
     free(node->value);
@@ -143,6 +152,7 @@ void setValue(char *newValue, Node node){
   }
 }
 
+// Returns a new node
 Node newNode(char *key, char *value){
   Node new = malloc(sizeof(struct node));
   new->key = malloc(strlen(key) + 1);
