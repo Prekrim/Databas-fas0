@@ -143,7 +143,7 @@ Node deleteMatch(char *buffer, Node tree, int *success){
       return tree;
     }
     else{ // Delete current node
-      printf("Target is node");
+      printf("Target is node\n");
       if(path == 1){ // Current node is left of previous node
 	printf("Current node is left of previous node");
 	if(cursor->left == NULL){

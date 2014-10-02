@@ -106,7 +106,6 @@ Node newEntry(Node list){
 
 
 Node delete(Node list){
-  // Delete
   char buffer[128];
   printf("Enter key: ");
   readline(buffer, 128, stdin);
@@ -114,22 +113,30 @@ Node delete(Node list){
   int found = 0;
   int success = 0;
   Node target = findMatch(buffer, list, &found);
-  /*char *key = malloc(strlen(findKey(target)) + 1);
+  if (target == NULL) { 
+    printf("Could not find an entry matching key \"%s\"!\n", buffer);
+    return list;
+  }
+
+  char* deletedKey = malloc(sizeof(findKey(target) + 1));
+  char* deletedValue = malloc(sizeof(findValue(target) + 1));
+  strcpy(deletedKey, findKey(target));
+  strcpy(deletedValue, findValue(target));  
+  /*
+  char *key = malloc(strlen(findKey(target)) + 1);
   strcpy(findKey(target), key);
   char *val = malloc(strlen(findValue(target)) + 1);
   strcpy(findValue(target), val);
   printf("Val is %s and key is %s", val, key);
-  
   printf("Val is %s and key is %s", val, key);
   */
   list = deleteMatch(buffer, list, &success);
   if(success){
-    printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", findKey(target), findValue(target));
+    printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", deletedKey, deletedValue);
   } 
-  else{
-    printf("Could not find an entry matching key \"%s\"!\n", buffer);
-  }
   
+  free(deletedKey);
+  free(deletedValue);
   //free(key);
   //free(val);
   return (list);
