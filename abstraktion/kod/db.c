@@ -122,14 +122,6 @@ Node delete(Node list){
   char* deletedValue = malloc(sizeof(findValue(target) + 1));
   strcpy(deletedKey, findKey(target));
   strcpy(deletedValue, findValue(target));  
-  /*
-  char *key = malloc(strlen(findKey(target)) + 1);
-  strcpy(findKey(target), key);
-  char *val = malloc(strlen(findValue(target)) + 1);
-  strcpy(findValue(target), val);
-  printf("Val is %s and key is %s", val, key);
-  printf("Val is %s and key is %s", val, key);
-  */
   list = deleteMatch(buffer, list, &success);
   if(success){
     printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", deletedKey, deletedValue);
@@ -137,8 +129,6 @@ Node delete(Node list){
   
   free(deletedKey);
   free(deletedValue);
-  //free(key);
-  //free(val);
   return (list);
   
 }
