@@ -110,6 +110,7 @@ Node deleteMatch(char *buffer, Node tree, int *success){
     if(prev == NULL){ // Delete first node
       if(tree->left == NULL && tree->right == NULL){
 	return NULL;
+	clearNode(cursor);
       }else if(tree->left == NULL){
 	tree = tree->right;
 	clearNode(cursor);
@@ -125,8 +126,6 @@ Node deleteMatch(char *buffer, Node tree, int *success){
       }
     }
     else if(cursor->left == NULL && cursor->right == NULL){ // Delete leaf
-      printf("Target is a leaf");
-      printf("Previous is %s ", prev->key);
       if(path == 1){ // Leaf is left of parent node
 	prev->left = NULL;
 	
@@ -137,11 +136,8 @@ Node deleteMatch(char *buffer, Node tree, int *success){
       return tree;
     }
     else{ // Delete current node
-      printf("Target is node\n");
       if(path == 1){ // Current node is left of previous node
-	printf("Current node is left of previous node");
 	if(cursor->left == NULL){
-	  printf("Current node has no left node");
 	  prev->left = cursor->right;
 	  
 	}else if(cursor->right == NULL){

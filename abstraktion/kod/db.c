@@ -122,14 +122,14 @@ Node delete(Node list){
     printf("Could not find an entry matching key \"%s\"!\n", buffer);
     return list;
   }
-
+  
   char* deletedKey = malloc(sizeof(findKey(target) + 1));
   char* deletedValue = malloc(sizeof(findValue(target) + 1));
   strcpy(deletedKey, findKey(target));
   strcpy(deletedValue, findValue(target));  
   list = deleteMatch(buffer, list, &success);
   if(success){
-    printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", deletedKey, deletedValue);
+     printf("Deleted the following entry:\nkey: %s\nvalue: %s\n", deletedKey, deletedValue);
   } 
   
   free(deletedKey);
@@ -166,11 +166,11 @@ int main(int argc, char *argv[]){
   // Read the input file
   char **pointer = ((argv));
   char *filename = *(pointer + 1);//argv[1];
-
+  
   // Read the database
   printf("Loading database \"%s\"...\n\n", filename);
   Node list = createDatabase(filename);
-
+  
   // Main loop  
   // Choose the desired operation
   int choice = chooseIndex();  
