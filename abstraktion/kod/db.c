@@ -166,12 +166,16 @@ int main(int argc, char *argv[]){
   char **pointer = ((argv));
   char *filename = *(pointer + 1);//argv[1];
   
-  // Read the database
-  
+  // Read the database  
   printf("Loading database \"%s\"...\n\n", filename);
   Node list = createDatabase(filename);
+  if (list == NULL){
+    puts("Invalid database file");
+    puts("Exiting");
+    return -1;
+  }
   
-  // Main loop  
+  // Main loop
   // Choose the desired operation
   int choice = chooseIndex();  
   
@@ -207,7 +211,9 @@ int main(int argc, char *argv[]){
     choice = chooseIndex();
     }
     if (choice == 0){
+      clearDatabase(list);
       puts("Good bye!");
+      fclose(stdin);
   }
   return 0;
 }

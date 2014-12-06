@@ -32,6 +32,9 @@ Node newNode(char *key, char *value);
 // Returns tree with node inserted
 Node insertNode(Node node, Node tree);  
 
+// Frees the entire tree
+void clearDatabase(Node tree);
+
 // Calls printDatabase with the left and right nodes of node
 void map(Node node);   
 

@@ -6,13 +6,15 @@
 // Function prototypes
 void clearNode(Node node);
 void printDatabase(Node database);
+Node insertNode(Node node, Node tree);
+Node readDatabase(char* filename);
 Node nextRightNode(Node node);
 Node nextLeftNode(Node node);
 Node prevNode(Node prev, Node searchNode, int *path);
 void setNextNode(Node node, Node newNode);
 void setKey(char *newKey, Node node);
 Node nextNode(Node node);
-
+void clearDatabase(Node tree);
 
 // Define binary tree
 typedef struct node{
@@ -37,8 +39,7 @@ Node insertNode(Node node, Node tree){
   }
 
   if (tree == NULL) {
-    tree = node;
-    return tree;
+    return node;
   }
 
   int compare = strcmp(node->key, tree->key);
@@ -76,7 +77,7 @@ Node readDatabase(char *filename){
       readline(key, 128, database);
       readline(value, 128, database);
       if(!(strcmp(key, "")) && !(strcmp(value, ""))){
-	return tree;
+	return NULL;
       }
       Node newTree = newNode(key, value);
       tree = insertNode(newTree, tree);
@@ -262,12 +263,9 @@ Node prevNode(Node prev, Node searchNode, int *path){
       int compare = strcmp(prev->key, searchNode->key);
       if(compare > 0){
 	*path = 1;
-	printf("Prev is now %s\n", prev->key);
 	prev = prevNode(prev->left, searchNode, path);
-	printf("Prev is now %s\n", prev->key);
       }else{
 	*path = -1;
-	printf("Prev is now %s\n", prev->key);
 	prev = prevNode(prev->right, searchNode, path);
       }
 
@@ -277,7 +275,16 @@ Node prevNode(Node prev, Node searchNode, int *path){
   return NULL;
 }
 
-
+void clearDatabase(Node tree){
+  if (tree->left != NULL){
+    clearDatabase(tree->left);
+  }
+  if (tree->right != NULL){
+    clearDatabase(tree->right);  
+  }
+  clearNode(tree);
+}
+ 
 void clearNode(Node node){
   free(node->key);
   free(node->value);
