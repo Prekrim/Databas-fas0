@@ -31,30 +31,24 @@ Node insertNode(Node node, Node tree){
   }
 
   int compare = strcmp(node->key, tree->key);
-  //printf("checking %s vs %s with result %d\n", node->key, tree->key, compare);
 
   if (compare < 0 && tree->left == NULL){
     tree->left = node;
-    //puts("writing left");
     return tree;
   }
   if (compare < 0 && tree->left != NULL){
-    //puts("going left");
       insertNode(node, tree->left);
       return tree;
     }
   
   if (compare > 0 && tree->right == NULL){
-    //puts("writing right");
     tree->right = node;
     return tree;
   }
   if (compare > 0 && tree->right != NULL){
-    //puts("going right");
     insertNode(node, tree->right);
     return tree;
   } 
-  //puts("Done");
   return tree;
 }
 
@@ -244,6 +238,7 @@ Node newNode(char *key, char *value){
   return new;
 
 }
+
 
 Node prevNode(Node prev, Node searchNode, int *path){
   if(searchNode->key != prev->key && prev != NULL){
