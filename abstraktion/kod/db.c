@@ -5,6 +5,7 @@
 #include "database.h"
 
 // Funktionsprototyper
+Node createDatabase(char *filename);
 int chooseIndex();
 void query(Node list);
 void update(Node list);
@@ -12,6 +13,12 @@ Node newEntry(Node list);
 void printDatabase(Node list);
 Node delete(Node list);
 int main(int argc, char *argv[]);
+
+Node createDatabase(char *filename){
+  Node database = readDatabase(filename);
+  return database;
+}
+
 
 // Returns an int that corresponds to the desired action
 int chooseIndex(){
@@ -103,8 +110,6 @@ Node newEntry(Node list){
   return (list);
 } 
 
-
-
 Node delete(Node list){
   char buffer[128];
   printf("Enter key: ");
@@ -159,11 +164,12 @@ int main(int argc, char *argv[]){
   puts("");
 
   // Read the input file
-  char *filename = argv[1];
-  
+  char **pointer = ((argv));
+  char *filename = *(pointer + 1);//argv[1];
+
   // Read the database
   printf("Loading database \"%s\"...\n\n", filename);
-  Node list = readDatabase(filename);
+  Node list = createDatabase(filename);
 
   // Main loop  
   // Choose the desired operation
@@ -193,18 +199,15 @@ int main(int argc, char *argv[]){
       printDatabase(list);
       break;
 
-    case 0:
-      // Exit
-      puts("Good bye!");
-      break;
-
     default:
       // Please try again
       puts("Could not parse choice! Please try again");
     }
     puts("");
     choice = chooseIndex();
-
+    }
+    if (choice == 0){
+      puts("Good bye!");
   }
   return 0;
 }
