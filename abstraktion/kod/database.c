@@ -3,6 +3,17 @@
 #include <stdio.h>
 #include <string.h>
 
+// Function prototypes
+void clearNode(Node node);
+void printDatabase(Node database);
+Node nextRightNode(Node node);
+Node nextLeftNode(Node node);
+Node prevNode(Node prev, Node searchNode, int *path);
+void setNextNode(Node node, Node newNode);
+void setKey(char *newKey, Node node);
+Node nextNode(Node node);
+
+
 // Define binary tree
 typedef struct node{
   char *key;
@@ -64,6 +75,9 @@ Node readDatabase(char *filename){
       
       readline(key, 128, database);
       readline(value, 128, database);
+      if(!(strcmp(key, "")) && !(strcmp(value, ""))){
+	return tree;
+      }
       Node newTree = newNode(key, value);
       tree = insertNode(newTree, tree);
     }
@@ -229,9 +243,9 @@ void setKey(char *newKey, Node node){
 // Returns a new node
 Node newNode(char *key, char *value){
   Node new = malloc(sizeof(struct node));
-  new->key = malloc(strlen(key) + 1);
+  new->key = calloc(sizeof(char), strlen(key) + 1);
   strcpy(new->key, key);
-  new->value = malloc(strlen(value) + 1);
+  new->value = calloc(sizeof(char), strlen(value) + 1);
   strcpy(new->value, value);
   new->left = NULL;
   new->right = NULL;

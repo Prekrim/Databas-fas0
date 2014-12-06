@@ -1,10 +1,9 @@
-// Inkludera div biblotek
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include "database.h"
 
-// Funktionsprototyper
+// Function prototypes
 Node createDatabase(char *filename);
 int chooseIndex();
 void query(Node list);
@@ -168,6 +167,7 @@ int main(int argc, char *argv[]){
   char *filename = *(pointer + 1);//argv[1];
 
   // Read the database
+  
   printf("Loading database \"%s\"...\n\n", filename);
   Node list = createDatabase(filename);
 
