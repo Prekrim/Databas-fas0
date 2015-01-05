@@ -18,7 +18,6 @@ Node createDatabase(char *filename){
   return database;
 }
 
-
 // Returns an int that corresponds to the desired action
 int chooseIndex(){
   int choice;
@@ -145,7 +144,7 @@ void printDatabase(Node node){
     map(node);
   }
 }
-
+/*
 // Main function
 int main(int argc, char *argv[]){
   if (argc < 2){
@@ -217,3 +216,4 @@ int main(int argc, char *argv[]){
   }
   return 0;
 }
+*/

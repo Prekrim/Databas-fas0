@@ -31,6 +31,6 @@ void printDatabase(Node list);
 Node delete(Node list);
 
 
-int main(int argc, char *argv[]);
+//int main(int argc, char *argv[]);
 
 #endif

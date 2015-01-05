@@ -8,13 +8,20 @@ void clearNode(Node node);
 void printDatabase(Node database);
 Node insertNode(Node node, Node tree);
 Node readDatabase(char* filename);
+Node findMatch(char *key, Node tree, int *found);
+Node deleteMatch(char *buffer, Node tree, int *success);
+char *findKey(Node node);
+char *findValue(Node node);
 Node nextRightNode(Node node);
 Node nextLeftNode(Node node);
 Node prevNode(Node prev, Node searchNode, int *path);
 void setNextNode(Node node, Node newNode);
 void setKey(char *newKey, Node node);
-Node nextNode(Node node);
+Node newNode(char *key, char *value);
+Node prevNode(Node prev, Node searchNode, int *path);
 void clearDatabase(Node tree);
+void clearNode(Node node);
+
 
 // Define binary tree
 typedef struct node{
@@ -87,7 +94,7 @@ Node readDatabase(char *filename){
 
 // Find a matching node and return it, else return NULL
 Node findMatch(char *key, Node tree, int *found){
-  if (tree == NULL) {
+  if (tree == NULL || key == NULL) {
     return NULL;
   }
 
@@ -239,6 +246,9 @@ void setKey(char *newKey, Node node){
 
 // Returns a new node
 Node newNode(char *key, char *value){
+  if (key == NULL || value == NULL){
+    return NULL;
+  }
   Node new = malloc(sizeof(struct node));
   new->key = calloc(sizeof(char), strlen(key) + 1);
   strcpy(new->key, key);
@@ -249,7 +259,6 @@ Node newNode(char *key, char *value){
   return new;
 
 }
-
 
 Node prevNode(Node prev, Node searchNode, int *path){
   if(searchNode->key != prev->key && prev != NULL){
